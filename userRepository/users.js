@@ -7,7 +7,7 @@ class UserRepository{
         }
         this.filename = filename;
         try {
-            fs.accessSync(this.filename)
+            fs.accessSync(this.filename);
         } catch (error) {
             fs.writeFileSync(this.filename, '[]');
         }
@@ -15,20 +15,23 @@ class UserRepository{
 
     async getAll(){
         // open filename called this.filename
-        return JSON.parse(await fs.promises.readFile(this.filename, {
-            encoding: 'utf8'
-        }));
-        // // read its contents
-        // console.log(contents);
-        // // parse the contents
-        // const data = JSON.parse(contents);
-        // // Return the parsed data
-        // return data;
+        return JSON.parse(
+            await fs.promises.readFile(this.filename, {
+                encoding: 'utf8'
+            })
+        );
+    }
+
+    async create(attr){
+        const records = await this.getAll();
+        records.push(attr);
+        await fs.promises.writeFile(this.filename, JSON.stringify(records));
     }
 }
 const test = async () => {
     const repo = new UserRepository('users.json');
+    await repo.create({email: "test@test.com", password: "password"});
     const data = await repo.getAll();
     console.log(data);
 }
-test();
+test().catch(console.error);
