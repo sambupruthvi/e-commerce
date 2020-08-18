@@ -1,0 +1,4 @@
+Disadvantages of using a file system as data store to store a json file:
+    ->Will error if we try to open/write to the same file twice at the same time.
+    ->Won't work if we have multiple servers running on different machines.
+    ->We have to write to the FS everytime we want to update some data.
