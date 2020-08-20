@@ -1,5 +1,8 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const util = require('util');
+
+const scrypt = util.promisify(crypto.scrypt); //to avoid callback based approch and convert it into promise based approach.
 
 class UserRepository{
     constructor(filename){
@@ -24,13 +27,24 @@ class UserRepository{
     }
 
     async create(attr){
+        const salt = await crypto.randomBytes(8).toString('hex');
+        const buf = await scrypt(attr.password, salt, 64);
         attr.id = this.randomId();
         const records = await this.getAll();
-        records.push(attr);
+        const record = {
+            ...attr,
+            password : `${buf.toString('hex')}.${salt}`
+        };
+        records.push(record);
         await this.writeAll(records);
-        return attr;
+        return record;
     }
 
+    async comparePasswords(saved, supplied){
+        const [hashed, salt] = saved.split('.');
+        const crypted = await scrypt(supplied, salt, 64);
+        return hashed === crypted.toString('hex');
+    }
     async writeAll(records){
         await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2));
     }

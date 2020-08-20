@@ -9,6 +9,7 @@ const port = 3000;
 
 app.use(cookieSession({
     keys: ['asdf;lkjgh']
+    // maxAge: 20
 }))
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -71,7 +72,8 @@ app.post('/signin', async (req, res) => {
     if (!user) {
         return res.send('Email not found');
     }
-    if (user.password !== password) {
+    const check = await userRepo.comparePasswords(user.password, password);
+    if (!check) {
         return res.send('Invalid Password');
     }
     // console.log(req.body);
