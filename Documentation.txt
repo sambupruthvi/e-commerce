@@ -17,3 +17,17 @@ JSON.stringfy(objects, function, indentation)
 
 
 methods that are required are shown in documentation.md
+
+
+Handling Authentication:
+    Request cookies:
+        When we make a request to a server, server responds back to request with a cookie. A cookie is small string of characters. Please include this with every followup request you make to me.
+        Then the browser requests with cookies.
+
+Cookie library
+    cookie-session is also a middle ware function like body-parser.
+
+Temp mail
+    For temporary email
+
+
