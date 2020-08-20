@@ -2,3 +2,18 @@ Disadvantages of using a file system as data store to store a json file:
     ->Will error if we try to open/write to the same file twice at the same time.
     ->Won't work if we have multiple servers running on different machines.
     ->We have to write to the FS everytime we want to update some data.
+
+2 very popular approachs for managing data for web applications:
+Repository approach
+    A single class (Repository) is responsible for data access. All records are stored and used as plain JS objects
+
+Active Record approach
+    Every record is an instance of a 'model' class that has methods to save, update, delete this record.
+
+constructors in js are usually synchronous and should not be made async
+    they also should not contain async code in it
+
+JSON.stringfy(objects, function, indentation)
+
+
+methods that are required are shown in documentation.md
