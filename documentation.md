@@ -9,3 +9,19 @@ methods
 | delete   | id              | null         | Delete the user with the given id                             |
 | redomid  | -               | id           | Generates a random Id                                         |
 | writeAll | [user]          | null         | Writes all users to users.json file                                                              |
+
+
+### Refactoring the index.js page
+
+- Routes
+    - admin/auth.js
+    - admin/products.js
+    - products.js
+    - cart.js
+
+- Repositories
+    - users.js
+    - products.js
+
+- Views
+    - various
