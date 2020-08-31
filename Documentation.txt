@@ -30,4 +30,9 @@ Cookie library
 Temp mail
     For temporary email
 
+We use express-validator to validate the inputs from the user, before we validate we sanitize the user inputs.
+express-validator is a middleware
+the results from the validator is going to attach the results of all this validation to the request object that is going to eventually flow into our request handler, so in order to get access to all that validation logic or the output of it we are passing in the req object.
+
+
 

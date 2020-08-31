@@ -1,8 +1,11 @@
-const userRepo = require('../../userRepository/users');
 const express = require('express');
+const { body, validationResult } =require('express-validator');
 const router = express.Router();
+const userRepo = require('../../userRepository/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
+const { requireEmail, requirePassword, requirePasswordConfirmation } = require('./validators');
+
 router.get('/signup', (req, res) => {
     // res.send(`Call received at port ${port}`);
     res.send(
@@ -11,18 +14,16 @@ router.get('/signup', (req, res) => {
 });
 
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', [
+        requireEmail,
+        requirePassword,
+        requirePasswordConfirmation
+    ], async (req, res) => {
+        const Error = validationResult(req);
+        console.log(Error);
     // console.log('Post request received !!');
     const {email, password, confirmation} = req.body;
-    const emailCheck = await userRepo.getOneBy({email});
-    if (emailCheck) {
-        return res.send('Email in use');
-    }
-    if (password !== confirmation) {
-        return res.send('Password did not match');
-    }
-    // console.log(req.body);
-
+    
     const user = await userRepo.create({email, password});
     req.session.userId = user.id;
     res.send('Account Created');
