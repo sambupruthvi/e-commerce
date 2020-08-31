@@ -4,7 +4,7 @@ const router = express.Router();
 const userRepo = require('../../userRepository/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
-const { requireEmail, requirePassword, requirePasswordConfirmation } = require('./validators');
+const { requireEmail, requirePassword, requirePasswordConfirmation, requireEmailExist, requireValidPasswordForUser } = require('./validators');
 
 router.get('/signup', (req, res) => {
     // res.send(`Call received at port ${port}`);
@@ -20,13 +20,17 @@ router.post('/signup', [
         requirePasswordConfirmation
     ], async (req, res) => {
         const Error = validationResult(req);
-        console.log(Error);
+        // console.log(Error);
+        if (!Error.isEmpty()) {
+            res.send(signupTemplate({ req, Error }));
+        }
+        
     // console.log('Post request received !!');
     const {email, password, confirmation} = req.body;
     
     const user = await userRepo.create({email, password});
     req.session.userId = user.id;
-    res.send('Account Created');
+    //res.send('Account Created');
 });
 
 router.get('/signout', (req, res) => {
@@ -37,22 +41,21 @@ router.get('/signout', (req, res) => {
 router.get('/signin', (req, res) => {
     // res.send(`Call received at port ${port}`);
     res.send(
-        signinTemplate()
+        signinTemplate({})
     );
 });
 
-router.post('/signin', async (req, res) => {
-    // console.log('Post request received !!');
+router.post('/signin', [
+    requireEmailExist,
+    requireValidPasswordForUser
+], async (req, res) => {
     const {email, password} = req.body;
-    const user = await userRepo.getOneBy({email});
-    if (!user) {
-        return res.send('Email not found');
+    const Error = validationResult(req);
+    // console.log(Error);
+    if (!Error.isEmpty()) {
+        return res.send(signinTemplate({Error}));
     }
-    const check = await userRepo.comparePasswords(user.password, password);
-    if (!check) {
-        return res.send('Invalid Password');
-    }
-    // console.log(req.body);
+    
 
     // const user = await userRepo.create({email, password});
     // req.session.userId = user.id;

@@ -34,5 +34,6 @@ We use express-validator to validate the inputs from the user, before we validat
 express-validator is a middleware
 the results from the validator is going to attach the results of all this validation to the request object that is going to eventually flow into our request handler, so in order to get access to all that validation logic or the output of it we are passing in the req object.
 
+mapped() whenever mapped is applied to an array, it returns an object.
 
 
