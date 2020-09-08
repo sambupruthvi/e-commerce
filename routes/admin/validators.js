@@ -7,12 +7,15 @@ module.exports = {
         if (emailCheck) {
             throw new Error('Email already in use');
         }
+        return true;
     }),
     requirePassword: body('password').trim().isLength({min: 8, max : 20}).withMessage('Must be between 8 and 20 characters'),
     requirePasswordConfirmation: body('confirmation').trim().isLength({min: 8, max : 20}).withMessage('Must be between 8 and 20 characters').custom((confirmation, { req }) => {
-        if (req.body.password !== confirmation) {
+        if (confirmation !== req.body.password) {
             throw new Error('Password did not match');
-        }
+        } else {
+            return true;
+        } 
     }),
     requireEmailExist: body('email').trim().normalizeEmail().isEmail().withMessage('Must provide a valid email').custom(async email => {
         const user = await userRepo.getOneBy({email});
@@ -29,5 +32,6 @@ module.exports = {
         if (!validPassword) {
             throw new Error('Invalid Password');
         }
+        return true;
     })
 }

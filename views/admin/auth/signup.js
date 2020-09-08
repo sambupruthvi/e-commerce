@@ -1,19 +1,36 @@
 const layout = require('../layout');
 const { getErrorMsg } = require('../../helpers');
 
-module.exports = ( { req, Error }) => {
-    return layout( {content : `
-        <div>
-            Your id is: ${req.session.userId}
-            <form method = "POST">
-                <input name = "email" placeholder = "Email">
-                ${getErrorMsg(Error, 'email')}
-                <input name = "password" placeholder = "password">
-                ${getErrorMsg(Error, 'password')}
-                <input name = "confirmation" placeholder = "confirm password">
-                ${getErrorMsg(Error, 'confirmation')}
-                <button>Sign Up</button>
-            </form>
+module.exports = ( { req, errors }) => {
+    return layout({
+        content: `
+        <div class="container">
+            <div class="columns is-centered">
+            <div class="column is-one-quarter">
+                <form method="POST">
+                <h1 class="title">Sign Up</h1>
+                <div class="field">
+                    <label class="label">Email</label>
+                    <input required class="input" placeholder="Email" name="email" />
+                    <p class="help is-danger">${getErrorMsg(errors, 'email')}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Password</label>
+                    <input required class="input" placeholder="Password" name="password" type="password" />
+                    <p class="help is-danger">${getErrorMsg(errors, 'password')}</p>
+                </div>
+                <div class="field">
+                    <label class="label">Password Confirmation</label>
+                    <input required class="input" placeholder="Password Confirmation" name="confirmation" type="password" />
+                    <p class="help is-danger">${getErrorMsg(errors, 'confirmation')}</p>
+                </div>
+                <button class="button is-primary">Submit</button>
+                </form>
+                <a href="/signin">Have an account? Sign In</a>
+            </div>
+            </div>
         </div>
-    `});
-}
+        `
+    });
+};
+    

@@ -36,4 +36,6 @@ the results from the validator is going to attach the results of all this valida
 
 mapped() whenever mapped is applied to an array, it returns an object.
 
+Learn about public folder and express-static middleware
+
 
