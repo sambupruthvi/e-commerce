@@ -7,7 +7,7 @@ const cookieSession = require('cookie-session');
 // make a express object that can be used to work with express functions
 const app = express();
 const port = 5000;
-
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 // route handler has path and callback functions
 // app.METHOD(PATH, HANDLER)
